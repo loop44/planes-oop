@@ -40,9 +40,20 @@ class Tu extends Plane {
 }
 
 class Airport {
-  constructor(name) {
+  constructor(name, planes = []) {
     this.name = name;
     this.parking = [];
+
+    // Агрегация, мы можем получить самолеты из вне, в качестве параметра конструктора
+    planes.forEach((plane) => {
+      this.parking.push(plane);
+      plane._isPlaneLanded = true;
+    });
+
+    // Композиция, МиГ-3 мы не получаем из вне, он живет только внутри класса
+    const mig3 = new MiG(3, 640);
+    mig3._isPlaneLanded = true;
+    this.parking.push(mig3);
   }
 
   // Вспомогательный метод который выгончет самолет с парковки
@@ -144,6 +155,8 @@ mig29.showStatus();
 testAirport.preparePlaneAndTakeoff(mig29);
 mig29.showStatus();
 testAirport.isPlaneOnParking(mig29);
+
+testAirport.showFastestOnParking();
 
 /* Два самолета класса МиГ и класса Ту
 - создадим самолет класса МиГ 
